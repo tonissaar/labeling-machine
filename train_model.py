@@ -5,6 +5,7 @@ import tensorflow as tf
 import io
 import json
 import plot_util
+import argparse
 from tensorflow import keras
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -20,11 +21,16 @@ import glob
 print('TF version')
 print(tf.__version__)
 
-GLOVE_PATH = 'glove.6B/glove.6B.100d.txt'
+GLOVE_PATH = 'glove/glove.6B.100d.txt'
 DATA_PATH = 'ml_interview_ads_data/*.csv'
 
+parser = argparse.ArgumentParser(description='Train model on a training set.')
+parser.add_argument('--path', help='path to training data folder', default='ml_interview_ads_data')
+args = parser.parse_args()
+
+
 data_list = []
-filelist = glob.glob(DATA_PATH)
+filelist = glob.glob(args.path + '/*.csv')
 for file in filelist:
     tmp = pd.read_csv(file, index_col=None, header=None)
     tmp['file'] = os.path.basename(file)

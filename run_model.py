@@ -5,6 +5,7 @@ import tensorflow as tf
 import io
 import json
 import glob
+import argparse
 from tensorflow import keras
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -18,6 +19,11 @@ from tensorflow.keras.models import Model
 from  tensorflow.keras.preprocessing.text import tokenizer_from_json
 
 
+parser = argparse.ArgumentParser(description='Run inference on a test set.')
+parser.add_argument('--path', help='path to test set folder', default='ml_interview_ads_data')
+args = parser.parse_args()
+
+
 with open('tokenizer.json') as f:
     data = json.load(f)
     tokenizer = tokenizer_from_json(data)
@@ -27,7 +33,7 @@ labels = pd.read_json('labels.json')
 labels[0] = labels['0']
 
 data_list = []
-filelist = glob.glob('/home/tonis/snackable/ml_interview_ads_data/*.csv')
+filelist = glob.glob(args.path + '/*.csv')
 for file in filelist:
     tmp = pd.read_csv(file, index_col=None, header=None)
     tmp['file'] = os.path.basename(file)
